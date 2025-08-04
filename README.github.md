@@ -1,6 +1,6 @@
 # 🎬 YouTube Downloader Web App
 
-A simple and user-friendly web application for downloading YouTube videos and playlists using Gradio interface.
+A modular and user-friendly web application for downloading YouTube videos and playlists using Gradio interface.
 
 ## ✨ Features
 
@@ -13,6 +13,7 @@ A simple and user-friendly web application for downloading YouTube videos and pl
 - **Progress Tracking**: Real-time download progress updates
 - **Batch Downloads**: Multiple videos packaged in ZIP files
 - **Clean Interface**: Intuitive Gradio-based web interface
+- **Modular Architecture**: Well-organized, maintainable codebase
 
 ## 🚀 Quick Start
 
@@ -89,24 +90,81 @@ This app is designed to be deployed on Hugging Face Spaces:
 - **yt-dlp**: YouTube download engine
 - **FFmpeg**: Audio/video processing (auto-detected or bundled)
 
-### File Structure
+### Project Structure
 
 ```
 youtube-downloader/
-├── app.py                 # Main Gradio application
-├── youtube_downloader.py  # Core download functionality
-├── requirements.txt       # Python dependencies
-├── README.md             # This file
-└── main.py              # Original CLI version (for reference)
+├── app.py                    # Main entry point
+├── config.py                 # Global configuration
+├── app/                      # Main application package
+│   ├── __init__.py
+│   ├── core/                 # Business logic
+│   │   ├── __init__.py
+│   │   ├── downloader.py     # Download functionality
+│   │   ├── video_info.py     # Video/playlist info extraction
+│   │   ├── progress_tracker.py # Progress tracking
+│   │   └── validators.py     # Input validation
+│   ├── interface/            # User interface
+│   │   ├── __init__.py
+│   │   ├── gradio_app.py     # Main Gradio interface
+│   │   ├── components/       # UI components
+│   │   │   ├── __init__.py
+│   │   │   ├── preview.py    # Video preview functionality
+│   │   │   └── download.py   # Download handling
+│   │   └── styles/           # CSS styles
+│   │       ├── __init__.py
+│   │       └── css_styles.py # Custom CSS
+│   ├── utils/                # Utility functions
+│   │   ├── __init__.py
+│   │   ├── file_manager.py   # File operations
+│   │   ├── ffmpeg_checker.py # FFmpeg detection
+│   │   ├── formatters.py     # Data formatting
+│   │   └── logger.py         # Logging setup
+│   └── exceptions/           # Custom exceptions
+│       ├── __init__.py
+│       └── custom_exceptions.py
+├── requirements.txt          # Python dependencies
+├── README.md                # This file
+├── downloads/               # Downloaded files directory
+└── logs/                   # Log files directory
 ```
 
 ### Key Features
 
+- **Modular Design**: Clean separation of concerns with dedicated modules
 - **Progress Tracking**: Real-time download progress with percentage updates
 - **Error Handling**: Comprehensive error messages and graceful failure handling
 - **Temporary Files**: Automatic cleanup of temporary files
 - **FFmpeg Detection**: Automatic detection of FFmpeg from multiple sources
 - **URL Validation**: Validates YouTube URLs before processing
+- **Scalable Architecture**: Easy to extend and maintain
+
+## 🏗️ Architecture Overview
+
+### Core Modules (`app/core/`)
+
+- **downloader.py**: Handles all download operations using yt-dlp
+- **video_info.py**: Extracts and processes video/playlist information
+- **progress_tracker.py**: Manages download progress tracking
+- **validators.py**: Validates user inputs and parameters
+
+### Interface Modules (`app/interface/`)
+
+- **gradio_app.py**: Main Gradio interface creation and event handling
+- **components/preview.py**: Video and playlist preview functionality
+- **components/download.py**: Download request handling
+- **styles/css_styles.py**: Custom CSS styling
+
+### Utility Modules (`app/utils/`)
+
+- **file_manager.py**: File and directory operations
+- **ffmpeg_checker.py**: FFmpeg availability detection
+- **formatters.py**: Data formatting utilities
+- **logger.py**: Logging configuration
+
+### Exception Handling (`app/exceptions/`)
+
+- **custom_exceptions.py**: Custom exception classes for better error handling
 
 ## ⚠️ Important Notes
 
@@ -141,21 +199,31 @@ youtube-downloader/
 
 ## 🛠️ Development
 
-### Project Structure
-
-The app is built with a modular design:
-
-- `app.py`: Gradio interface and user interaction logic
-- `youtube_downloader.py`: Core download functionality and utilities
-- Clean separation between UI and business logic
-
 ### Adding Features
 
 The modular design makes it easy to add new features:
 
-- New download formats can be added to the CONFIG
-- UI improvements can be made in `app.py`
-- Core functionality extensions go in `youtube_downloader.py`
+- **New download formats**: Add to `config.py` and update `app/core/downloader.py`
+- **UI improvements**: Modify `app/interface/components/` modules
+- **Core functionality**: Extend `app/core/` modules
+- **Utilities**: Add to `app/utils/` modules
+
+### Testing
+
+```bash
+# Run the application
+python app.py
+
+# Check logs
+tail -f youtube_downloader.log
+```
+
+### Code Style
+
+- Follow PEP 8 guidelines
+- Use type hints where appropriate
+- Add docstrings to all functions and classes
+- Keep modules focused on single responsibilities
 
 ## 📝 License
 
@@ -164,6 +232,14 @@ This project is for educational and personal use. Please respect YouTube's Terms
 ## 🤝 Contributing
 
 Feel free to submit issues, feature requests, or pull requests to improve the application.
+
+### Development Guidelines
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/new-feature`
+3. **Make your changes**: Follow the modular structure
+4. **Test thoroughly**: Ensure all functionality works
+5. **Submit a pull request**: Include clear description of changes
 
 ---
 
